@@ -19,6 +19,7 @@ for file in files:
 		# c = np.vstack((a,b)) # 纵向合并
         # output.to_csv('D:/pythonTest/data/one/file.csv', index=False)
 outputs = pd.concat(pieces, ignore_index = True)
+print outputs
 #load data
 # file=open("D:\pythonTest\data\one\Abelsonite__R070007__Raman__532__0__unoriented__Raman_Data_Processed__27040.txt")
 # lines=file.readlines()
