@@ -13,15 +13,16 @@ for file in files:
 	if os.path.splitext(file)[1] == '.txt' and specify_str in file:
 		print ("------Load " + file + "------")
 		dataPath = filepath + file
+		print file.split('__')[0]
 		txt = np.loadtxt(dataPath, delimiter = ', ')
+		# print txt
 		txtDF = pd.DataFrame(txt, columns = list('AB')) # 用波数代替columns list('AB')
-		txtDF.set_index('A')
 		# print txtDF
-		txtTmp = pd.DataFrame(txtDF['B'], index = list(txtDF['A']))
+		txtTmp = pd.DataFrame(txt, index = txtDF['A'])
 		# print txtTmp
-		txtDF1 = pd.DataFrame(txtDF.iloc[:,1], index = list(txtDF.iloc[:,0]))
-		# print txtDF1.T
-		pieces.append(txtDF.T)
+		txtDF1 = pd.DataFrame(txtTmp.iloc[:,1])
+		# print txtDF1
+		pieces.append(txtDF1.T)
 		# c = np.vstack((a,b)) # 纵向合并
 outputs = pd.concat(pieces, ignore_index = True)
 # print outputs
