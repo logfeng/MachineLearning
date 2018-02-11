@@ -112,10 +112,10 @@ for f in range(n_fold):
                       '| Accuracy loss: %.4f' % accuracy)
 
     print("SAVING LOSS.....................................")
-    train_loss[t * n_fold + f] = loss.data.numpy()[0]
-    valid_loss[t * n_fold + f] = mse.data.numpy()[0]
+    train_loss[f] = loss.data.numpy()[0]
+    valid_loss[f] = cel.data.numpy()[0]
     np.save("train_loss.npy", train_loss)
     np.save("valid_loss.npy", valid_loss)
 
     print("SAVING MODELS...................................")
-    torch.save(cnn, 'target_%d_fold_%d_train_%.4f_valid_%.4f.pkl' % (t, f, train_loss[t * n_fold + f], valid_loss[t * n_fold + f]))
+    torch.save(cnn, 'fold_%d_train_%.4f_valid_%.4f.pkl' % (f, train_loss[f], valid_loss[f]))
