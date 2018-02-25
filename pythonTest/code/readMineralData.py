@@ -7,8 +7,8 @@ from scipy import interpolate
 import math
 import matplotlib.pyplot as plt
 
+# filepath = '../data/one/'
 filepath = '../data/excellent_unoriented/'
-# filepath = '../data/excellent_unoriented/'
 files = os.listdir(filepath)
 pieces = []
 specify_str = '532'
@@ -23,14 +23,12 @@ for file in files:
 		print ("------Load " + file + "------")
 		dataPath = filepath + file
 		species = file.split('__')[0]
-		print species
-		print speciesTmp
-		print (species is speciesTmp)
-		if species is speciesTmp :
+		# print (species == speciesTmp)
+		if species == speciesTmp :
 			pass
 		else :
 			label = label + 1
-		print label
+		# print (label)
 		speciesTmp = species
 		txt = np.loadtxt(dataPath, delimiter = ', ')
 		# print txt
