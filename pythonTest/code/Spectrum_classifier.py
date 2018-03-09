@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from torch.autograd import Variable
 import torch.utils.data as Data
+import torch.nn.functional as F
 import torchvision
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -13,6 +14,7 @@ EPOCH = 1 #20  # train the training data n times, to save time, we just train 1 
 BATCH_SIZE = 50
 LR = 0.001  # learning rate
 BAIS_INIT = 0
+ACTIVATION = F.tanh
 
 # n_target = 5
 n_fold = 20
@@ -49,7 +51,7 @@ class CNN_classifier(nn.Module):
             nn.MaxPool1d(kernel_size=2, stride=2),                                          # output shape (64, 1, 25)
         )
         self.dense = nn.Sequential(
-            nn.Linear(64 * 25, 2048),  # Dense(2048)
+            nn.Linear(64 * 25, 2048),  # Dense(2048)  # tanh
             nn.BatchNorm1d(momentum=0.4, num_features=2048),
             nn.LeakyReLU(negative_slope=0.5),
             nn.Dropout(0.5),
@@ -113,7 +115,7 @@ for f in range(n_fold):
                 print('Epoch: ', epoch,
                       '| Train loss: %.4f' % loss.data[0],
                       '| Test loss: %.4f' % cel.data.numpy()[0],
-                      '| Accuracy loss: %.2f' % accuracy)
+                      '| Accuracy: %.2f' % accuracy)
 
     print("SAVING LOSS.....................................")
     train_loss[f] = loss.data.numpy()[0]
