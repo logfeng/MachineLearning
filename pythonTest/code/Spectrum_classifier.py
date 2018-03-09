@@ -78,53 +78,52 @@ class CNN_classifier(nn.Module):
 
 train_loss = np.zeros(n_fold)
 valid_loss = np.zeros(n_fold)
-cnn = CNN_classifier()
-print (cnn)
+
 # arrange data
-# for f in range(n_fold):
-#     print("Fold %d --------------------------------------------" % f)
-#     train_data, test_data, train_label, test_label = train_test_split(X, Y, test_size=0.05)
-#     print (X)
-#     print (train_data)
-#     train_data = Data.TensorDataset(torch.unsqueeze(torch.FloatTensor(train_data), dim=1),
-#                                     torch.LongTensor(train_label))
-#     train_loader = Data.DataLoader(dataset=train_data, batch_size=BATCH_SIZE, shuffle=True)
-#     test_y = torch.LongTensor(test_label)
-#     test_x = Variable(torch.unsqueeze(torch.FloatTensor(test_data), dim=1))
-#     # net work instance
-#     cnn = CNN_classifier()
-#     optimizer = torch.optim.Adam(cnn.parameters(), lr=LR, betas=(0.9, 0.999), eps=1e-08)  # optimize all cnn parameters
-#     loss_func = nn.CrossEntropyLoss(weight= None)          # the target label is not one-hotted, weight is proportional to the number of samples in class C
+for f in range(n_fold):
+    print("Fold %d --------------------------------------------" % f)
+    train_data, test_data, train_label, test_label = train_test_split(X, Y, test_size=0.05)
+    print (X)
+    print (train_data)
+    train_data = Data.TensorDataset(torch.unsqueeze(torch.FloatTensor(train_data), dim=1),
+                                    torch.LongTensor(train_label))
+    train_loader = Data.DataLoader(dataset=train_data, batch_size=BATCH_SIZE, shuffle=True)
+    test_y = torch.LongTensor(test_label)
+    test_x = Variable(torch.unsqueeze(torch.FloatTensor(test_data), dim=1))
+    # net work instance
+    cnn = CNN_classifier()
+    optimizer = torch.optim.Adam(cnn.parameters(), lr=LR, betas=(0.9, 0.999), eps=1e-08)  # optimize all cnn parameters
+    loss_func = nn.CrossEntropyLoss(weight= None)          # the target label is not one-hotted, weight is proportional to the number of samples in class C
 
-#     for epoch in range(EPOCH):
-#         for step, (x, y) in enumerate(train_loader):   # gives batch data, normalize x when iterate train_loader
-#             b_x = Variable(x)                          # batch x
-#             b_y = Variable(y).type(torch.LongTensor)   # batch y
+    for epoch in range(EPOCH):
+        for step, (x, y) in enumerate(train_loader):   # gives batch data, normalize x when iterate train_loader
+            b_x = Variable(x)                          # batch x
+            b_y = Variable(y).type(torch.LongTensor)   # batch y
 
-#             output = cnn(b_x)[0]           # cnn output
-#             loss = loss_func(output, b_y)  # cross entropy loss
-#             optimizer.zero_grad()          # clear gradients for this training step
-#             loss.backward()                # backpropagation, compute gradients
-#             optimizer.step()               # apply gradients
+            output = cnn(b_x)[0]           # cnn output
+            loss = loss_func(output, b_y)  # cross entropy loss
+            optimizer.zero_grad()          # clear gradients for this training step
+            loss.backward()                # backpropagation, compute gradients
+            optimizer.step()               # apply gradients
 
-#             if step % 15 == 0:
-#                 test_output, last_layer = cnn(test_x)
-#                 pred_y = torch.max(test_output, 1)[1].data.squeeze()
-#                 test_y_tmp = Variable(test_y)
-#                 cel = loss_func(test_output, test_y_tmp)
-#                 # print (type(pred_y))
-#                 # print (type(test_y))
-#                 accuracy = sum(pred_y == test_y) / float(test_y.size(0))
-#                 print('Epoch: ', epoch,
-#                       '| Train loss: %.4f' % loss.data[0],
-#                       '| Test loss: %.4f' % cel.data.numpy()[0],
-#                       '| Accuracy: %.2f' % accuracy)
+            if step % 15 == 0:
+                test_output, last_layer = cnn(test_x)
+                pred_y = torch.max(test_output, 1)[1].data.squeeze()
+                test_y_tmp = Variable(test_y)
+                cel = loss_func(test_output, test_y_tmp)
+                # print (type(pred_y))
+                # print (type(test_y))
+                accuracy = sum(pred_y == test_y) / float(test_y.size(0))
+                print('Epoch: ', epoch,
+                      '| Train loss: %.4f' % loss.data[0],
+                      '| Test loss: %.4f' % cel.data.numpy()[0],
+                      '| Accuracy: %.2f' % accuracy)
 
-#     print("SAVING LOSS.....................................")
-#     train_loss[f] = loss.data.numpy()[0]
-#     valid_loss[f] = cel.data.numpy()[0]
-#     np.save("train_loss.npy", train_loss)
-#     np.save("valid_loss.npy", valid_loss)
+    print("SAVING LOSS.....................................")
+    train_loss[f] = loss.data.numpy()[0]
+    valid_loss[f] = cel.data.numpy()[0]
+    np.save("train_loss.npy", train_loss)
+    np.save("valid_loss.npy", valid_loss)
 
-#     print("SAVING MODELS...................................")
-#     torch.save(cnn, 'fold_%d_train_%.4f_valid_%.4f.pkl' % (f, train_loss[f], valid_loss[f]))
+    print("SAVING MODELS...................................")
+    torch.save(cnn, 'fold_%d_train_%.4f_valid_%.4f.pkl' % (f, train_loss[f], valid_loss[f]))
