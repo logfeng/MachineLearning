@@ -83,8 +83,6 @@ valid_loss = np.zeros(n_fold)
 for f in range(n_fold):
     print("Fold %d --------------------------------------------" % f)
     train_data, test_data, train_label, test_label = train_test_split(X, Y, test_size=0.05)
-    print (X)
-    print (train_data)
     train_data = Data.TensorDataset(torch.unsqueeze(torch.FloatTensor(train_data), dim=1),
                                     torch.LongTensor(train_label))
     train_loader = Data.DataLoader(dataset=train_data, batch_size=BATCH_SIZE, shuffle=True)
