@@ -17,6 +17,7 @@ minSpectrum = 85
 numSpectrum = maxSpectrum - minSpectrum + 1
 speciesTmp = ''
 label = 0
+classNum = 1
 # preprocess, resample
 for file in files:
 	if os.path.splitext(file)[1] == '.txt' and specify_str in file:
@@ -25,9 +26,11 @@ for file in files:
 		species = file.split('__')[0]
 		# print (species == speciesTmp)
 		if species == speciesTmp :
-			pass
+			classNum = classNum + 1
+			# pass
 		else :
 			label = label + 1
+			classNum = 1
 		# print (label)
 		speciesTmp = species
 		txt = np.loadtxt(dataPath, delimiter = ', ')
@@ -55,6 +58,7 @@ for file in files:
 		resample = res1 + list(ynew) + res2
 
 		resample.append(label)
+		resample.append(classNum)
 		resample.append(species)
 		resTmp = pd.DataFrame(resample)
 		pieces.append(resTmp.T)
