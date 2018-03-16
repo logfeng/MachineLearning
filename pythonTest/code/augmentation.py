@@ -45,18 +45,18 @@ for x, y in zip(X, Y) :
 			augData = np.concatenate((augData, augRight), axis=0)
 			augLabel = np.concatenate((Y, [y]))
 	i = i + 1
-	print (i)
 # plt.figure()
 # plt.plot(X[2566])
 # plt.show()
 
-singleMinerIndex.to_csv('../data/one/singleMinerIndex.csv', index = False)
 augData = np.delete(augData, singleMinerIndex, axis=0)
 augLabel = np.delete(augLabel, singleMinerIndex, axis=0)
 data = pd.DataFrame(augData)
 dataLabel = pd.DataFrame(augLabel)
+minerIndex = pd.DataFrame(singleMinerIndex)
 data.to_csv('../data/one/augmentation.csv', index = False)
 dataLabel.to_csv('../data/one/augLabel.csv', index = False)
+minerIndex.to_csv('../data/one/singleMinerIndex.csv', index = False)
 
 # gauss random noise, proportional to the magnitude at each wave number
 # different amplitude maybe need normalize
