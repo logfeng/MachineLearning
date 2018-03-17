@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import csv
 import copy
 import random
 import matplotlib.pyplot as plt
@@ -23,28 +22,29 @@ singleMinerIndex = []  # get rid of the data.
 # multiplication
 
 for x, y in zip(X, Y) :
-	# print x
-	# print y
-	y = int(y)
-	if y % 500 == 0 :
-		print("Class %d --------------------------------------------" % y)
-	if Z[y] < 2 :
-		singleMinerIndex = np.concatenate((singleMinerIndex, [i]))
-	elif Z[y] >= augEach :
-		pass
-	else :
-		shift_num = augEach - Z[y]
-		shift_num = int(shift_num)
-		# shift spectrum, shift each spectrum left or right a few wavenumbers randomly
-		s2 = random.sample(range(1, 500+1), shift_num)
-		for s in range(shift_num):
-			augLeft = np.zeros((1, length))
-			augRight = np.zeros((1, length))
-			augLeft[0][0:(length - s2[s])] = x[s2[s]:length]
-			augRight[0][s2[s]:length] = x[0:(length - s2[s])]
-			augData = np.concatenate((augData, augRight), axis=0)
-			augLabel = np.concatenate((Y, [y]))
-	i = i + 1
+    # print x
+    # print y
+    y = int(y)
+    if y % 500 == 0 :
+        print("Class %d --------------------------------------------" % y)
+    if Z[y] < 2 :
+        singleMinerIndex = np.concatenate((singleMinerIndex, [i]))
+    elif Z[y] >= augEach :
+        pass
+    else :
+        shift_num = augEach - Z[y]
+        shift_num = int(shift_num)
+        # shift spectrum, shift each spectrum left or right a few wavenumbers randomly
+        s2 = random.sample(range(1, 500+1), shift_num)
+        for s in range(shift_num):
+            augLeft = np.zeros((1, length))
+            augRight = np.zeros((1, length))
+            augLeft[0][0:(length - s2[s])] = x[s2[s]:length]
+            augRight[0][s2[s]:length] = x[0:(length - s2[s])]
+            augData = np.concatenate((augData, augRight), axis=0)
+            augLabel = np.concatenate((augLabel, [y]))
+    # print(augLabel)
+    i = i + 1
 # plt.figure()
 # plt.plot(X[2566])
 # plt.show()
@@ -54,9 +54,9 @@ augLabel = np.delete(augLabel, singleMinerIndex, axis=0)
 data = pd.DataFrame(augData)
 dataLabel = pd.DataFrame(augLabel)
 minerIndex = pd.DataFrame(singleMinerIndex)
-data.to_csv('../data/one/augmentation.csv', index = False)
-dataLabel.to_csv('../data/one/augLabel.csv', index = False)
-minerIndex.to_csv('../data/one/singleMinerIndex.csv', index = False)
+data.to_csv('../augmentation/augmentation.csv', index = False)
+dataLabel.to_csv('../augmentation/augLabel.csv', index = False)
+minerIndex.to_csv('../augmentation/singleMinerIndex.csv', index = False)
 
 # gauss random noise, proportional to the magnitude at each wave number
 # different amplitude maybe need normalize

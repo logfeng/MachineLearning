@@ -18,8 +18,8 @@ ACTIVATION = F.tanh
 
 # n_target = 5
 n_fold = 20
-X = np.loadtxt("train_data.csv", delimiter = ',', skiprows = 1)  # data
-Y = np.loadtxt("train_label.csv", delimiter = ',', skiprows = 1) # label
+X = np.loadtxt("../augmentation/train_data.csv", delimiter = ',', skiprows = 1)  # data
+Y = np.loadtxt("../augmentation/train_label.csv", delimiter = ',', skiprows = 1) # label
 # X = pd.read_csv("train_data.csv").astype(np.float32)  # data
 # Y = pd.read_csv("train_label.csv").astype(np.float32) # label
 
