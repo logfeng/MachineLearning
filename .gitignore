@@ -3,3 +3,4 @@
 #过滤文件夹
 pythonTest/data/
 ~$定标数据图.xlsx
+*.csv

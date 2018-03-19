@@ -14,7 +14,7 @@ classNum = Z.shape[0]
 augData = copy.deepcopy(X)
 augLabel = copy.deepcopy(Y)
 i = 0                  # index
-singleMinerIndex = []  # get rid of the data.
+singleMineralIndex = []  # get rid of the data.
 
 # augmentaion
 # offset
@@ -28,7 +28,7 @@ for x, y in zip(X, Y) :
     if y % 500 == 0 :
         print("Class %d --------------------------------------------" % y)
     if Z[y] < 2 :
-        singleMinerIndex = np.concatenate((singleMinerIndex, [i]))
+        singleMineralIndex = np.concatenate((singleMineralIndex, [i]))
     elif Z[y] >= augEach :
         pass
     else :
@@ -49,14 +49,14 @@ for x, y in zip(X, Y) :
 # plt.plot(X[2566])
 # plt.show()
 
-augData = np.delete(augData, singleMinerIndex, axis=0)
-augLabel = np.delete(augLabel, singleMinerIndex, axis=0)
+augData = np.delete(augData, singleMineralIndex, axis=0)
+augLabel = np.delete(augLabel, singleMineralIndex, axis=0)
 data = pd.DataFrame(augData)
 dataLabel = pd.DataFrame(augLabel)
-minerIndex = pd.DataFrame(singleMinerIndex)
+minerIndex = pd.DataFrame(singleMineralIndex)
 data.to_csv('../augmentation/augmentation.csv', index = False)
 dataLabel.to_csv('../augmentation/augLabel.csv', index = False)
-minerIndex.to_csv('../augmentation/singleMinerIndex.csv', index = False)
+minerIndex.to_csv('../augmentation/singleMineralIndex.csv', index = False)
 
 # gauss random noise, proportional to the magnitude at each wave number
 # different amplitude maybe need normalize
