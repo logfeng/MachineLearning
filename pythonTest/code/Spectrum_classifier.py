@@ -19,7 +19,7 @@ ACTIVATION = F.tanh
 # n_target = 5
 n_fold = 20
 X = np.loadtxt("../augmentation/train_data.csv", delimiter = ',', skiprows = 1)  # data
-Y = np.loadtxt("../augmentation/train_label.csv", delimiter = ',', skiprows = 1) # label
+Y = np.loadtxt("../augmentation/train_label.csv", delimiter = ',', skiprows = 1).astype(int) # label
 # X = pd.read_csv("train_data.csv").astype(np.float32)  # data
 # Y = pd.read_csv("train_label.csv").astype(np.float32) # label
 
@@ -59,7 +59,7 @@ class CNN_classifier(nn.Module):
         self.out = nn.Sequential(
             nn.Linear(2048, 1541),     # fully connected layer, output probability of miner classes [.1, .2, .7] unnormalized
             nn.BatchNorm1d(momentum=0.4, num_features=1541),
-            nn.Softmax(1),
+            nn.Softmax(),
         )
 
     def _set_init(self, layer):
