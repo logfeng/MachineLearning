@@ -53,12 +53,13 @@ class CNN_classifier(nn.Module):
         self.dense = nn.Sequential(
             nn.Linear(64 * 25, 2048),  # Dense(2048)  # tanh
             nn.BatchNorm1d(momentum=0.4, num_features=2048),
-            nn.LeakyReLU(negative_slope=0.5),
+            # nn.LeakyReLU(negative_slope=0.5),
+            nn.Tanh(),
             nn.Dropout(0.5),
         )
         self.out = nn.Sequential(
-            nn.Linear(2048, 1541),     # fully connected layer, output probability of miner classes [.1, .2, .7] unnormalized
-            nn.BatchNorm1d(momentum=0.4, num_features=1541),
+            nn.Linear(2048, 3),     # fully connected layer, output probability of miner classes [.1, .2, .7] unnormalized
+            nn.BatchNorm1d(momentum=0.4, num_features=3),
             nn.Softmax(),
         )
 
@@ -115,7 +116,13 @@ for f in range(n_fold):
                 print('Epoch: ', epoch,
                       '| Train loss: %.4f' % loss.data[0],
                       '| Test loss: %.4f' % cel.data.numpy()[0],
-                      '| Accuracy: %.2f' % accuracy)
+                      '| Test accuracy: %.2f' % accuracy)
+
+    # print 10 predictions from test data
+    test_output, _ = cnn(test_x[:10])
+    pred_y = torch.max(test_output, 1)[1].data.numpy().squeeze()
+    print(pred_y, 'prediction number')
+    print(test_y[:10].numpy(), 'real number')
 
     print("SAVING LOSS.....................................")
     train_loss[f] = loss.data.numpy()[0]
