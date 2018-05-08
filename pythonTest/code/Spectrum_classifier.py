@@ -16,12 +16,15 @@ LR = 0.001  # learning rate
 BAIS_INIT = 0
 ACTIVATION = F.tanh
 
-# n_target = 5
 n_fold = 20
-X = np.loadtxt("../augmentation/train_data.csv", delimiter = ',', skiprows = 1)  # data
+
+# shift
+# X = np.loadtxt("../augmentation/aug_data.csv", delimiter = ',', skiprows = 1)  # data
+# Y = np.loadtxt("../augmentation/aug_label.csv", delimiter = ',', skiprows = 1).astype(int) # label
+
+# shift + noise
+X = np.loadtxt("../augmentation/train_data.csv", delimiter = ',', skiprows = 2)  # data
 Y = np.loadtxt("../augmentation/train_label.csv", delimiter = ',', skiprows = 1).astype(int) # label
-# X = pd.read_csv("train_data.csv").astype(np.float32)  # data
-# Y = pd.read_csv("train_label.csv").astype(np.float32) # label
 
 # wavenumber = np.load("x_name.npy")
 
@@ -58,8 +61,8 @@ class CNN_classifier(nn.Module):
             nn.Dropout(0.5),
         )
         self.out = nn.Sequential(
-            nn.Linear(2048, 3),     # fully connected layer, output probability of miner classes [.1, .2, .7] unnormalized
-            nn.BatchNorm1d(momentum=0.4, num_features=3),
+            nn.Linear(2048, 6),     # fully connected layer, output probability of miner classes [.1, .2, .7] unnormalized
+            nn.BatchNorm1d(momentum=0.4, num_features=6),
             nn.Softmax(),
         )
 
@@ -83,7 +86,7 @@ valid_loss = np.zeros(n_fold)
 # arrange data
 for f in range(n_fold):
     print("Fold %d --------------------------------------------" % f)
-    train_data, test_data, train_label, test_label = train_test_split(X, Y, test_size=0.05)
+    train_data, test_data, train_label, test_label = train_test_split(X, Y, test_size=0.11)
     train_data = Data.TensorDataset(torch.unsqueeze(torch.FloatTensor(train_data), dim=1),
                                     torch.LongTensor(train_label))
     train_loader = Data.DataLoader(dataset=train_data, batch_size=BATCH_SIZE, shuffle=True)
@@ -105,7 +108,7 @@ for f in range(n_fold):
             loss.backward()                # backpropagation, compute gradients
             optimizer.step()               # apply gradients
 
-            if step % 15 == 0:
+            if step % 50 == 0:
                 test_output, last_layer = cnn(test_x)
                 pred_y = torch.max(test_output, 1)[1].data.squeeze()
                 test_y_tmp = Variable(test_y)

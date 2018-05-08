@@ -2,5 +2,7 @@
 
 #过滤文件夹
 pythonTest/data/
+pythonTest/train_model/
 ~$定标数据图.xlsx
 *.csv
+*.ipynb

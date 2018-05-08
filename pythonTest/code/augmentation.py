@@ -1,15 +1,16 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
 import copy
 import random
 import matplotlib.pyplot as plt
 
-X = np.loadtxt("../data/train_data.csv", delimiter = ',', skiprows = 1)     # data
-Y = np.loadtxt("../data/train_label.csv", delimiter = ',', skiprows = 1)    # label
-Z = np.loadtxt("../data/train_classNum.csv", delimiter = ',', skiprows = 1) # classNum
+X = np.loadtxt("../data/train_data_normalize.csv", delimiter = ',', skiprows = 1, encoding='utf-8')     # data
+Y = np.loadtxt("../data/train_label_select.csv", delimiter = ',', skiprows = 1, encoding='utf-8')    # label
+Z = np.loadtxt("../data/train_classNum_select.csv", delimiter = ',', skiprows = 1, encoding='utf-8') # classNum
 length = X.shape[1]    # colume
 mineral = X.shape[0]
-augEach = 10           # shift number of spectrum in each class
+augEach = 100          # shift number of spectrum in each class
 classNum = Z.shape[0]
 augData = copy.deepcopy(X)
 augLabel = copy.deepcopy(Y)
@@ -32,8 +33,9 @@ for x, y in zip(X, Y) :
     elif Z[y] >= augEach :
         pass
     else :
-        shift_num = augEach - Z[y]
-        shift_num = int(shift_num)
+        # shift_num = augEach - Z[y]
+        # shift_num = int(shift_num)
+        shift_num = int(augEach)
         # shift spectrum, shift each spectrum left or right a few wavenumbers randomly
         s2 = random.sample(range(1, 500+1), shift_num)
         for s in range(shift_num):
@@ -54,9 +56,11 @@ augLabel = np.delete(augLabel, singleMineralIndex, axis=0)
 data = pd.DataFrame(augData)
 dataLabel = pd.DataFrame(augLabel)
 minerIndex = pd.DataFrame(singleMineralIndex)
-data.to_csv('../augmentation/augmentation.csv', index = False)
-dataLabel.to_csv('../augmentation/augLabel.csv', index = False)
+data.to_csv('../augmentation/aug_data.csv', index = False)
+dataLabel.to_csv('../augmentation/aug_label.csv', index = False)
 minerIndex.to_csv('../augmentation/singleMineralIndex.csv', index = False)
+
+print('Done!\n')
 
 # gauss random noise, proportional to the magnitude at each wave number
 # different amplitude maybe need normalize
