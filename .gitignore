@@ -1,8 +1,8 @@
 ﻿[plain] view plaincopy
 
 #过滤文件夹
-pythonTest/data/
-pythonTest/train_model/
+Spectrum/data/
+Spectrum/train_model/
 ~$定标数据图.xlsx
 *.csv
 *.ipynb
